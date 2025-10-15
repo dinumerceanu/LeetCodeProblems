@@ -21,7 +21,7 @@ bool isSameTree(TreeNode* p, TreeNode* q) {
         return false;
     }
 
-    return isSubtree(p->left, q->left) && isSubtree(p->right, q->right);
+    return isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
 }
 
 bool isSubtree(TreeNode* root, TreeNode* subRoot) {
@@ -37,7 +37,7 @@ bool isSubtree(TreeNode* root, TreeNode* subRoot) {
         return true;
     }
 
-    return isSameTree(root->left, subRoot) || isSameTree(root->right, subRoot);
+    return isSubtree(root->left, subRoot) || isSubtree(root->right, subRoot);
 }
 
 int main() {
