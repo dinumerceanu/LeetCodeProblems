@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <algorithm>
 
 using namespace std;
 
@@ -13,41 +14,61 @@ struct TreeNode {
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
-int kthSmallest(TreeNode* root, int k) {
-    priority_queue<int> minHeap;
-    deque<TreeNode*> q;
+// int kthSmallest(TreeNode* root, int k) {
+//     priority_queue<int> minHeap;
+//     deque<TreeNode*> q;
 
-    q.push_back(root);
-    int onLevel = 1;
-    int onNextLevel = 0;
+//     q.push_back(root);
+//     int onLevel = 1;
+//     int onNextLevel = 0;
 
-    while (!q.empty()) {
-        TreeNode* node;
-        for (int i = 0; i < onLevel; i++) {
-            node = q.front();
-            q.pop_front();
-            minHeap.push(-node->val);
+//     while (!q.empty()) {
+//         TreeNode* node;
+//         for (int i = 0; i < onLevel; i++) {
+//             node = q.front();
+//             q.pop_front();
+//             minHeap.push(-node->val);
             
-            if (node->left) {
-                q.push_back(node->left);
-                onNextLevel++;
-            }
+//             if (node->left) {
+//                 q.push_back(node->left);
+//                 onNextLevel++;
+//             }
 
-            if (node->right) {
-                q.push_back(node->right);
-                onNextLevel++;
-            }
-        }
+//             if (node->right) {
+//                 q.push_back(node->right);
+//                 onNextLevel++;
+//             }
+//         }
 
-        onLevel = onNextLevel;
-        onNextLevel = 0;
+//         onLevel = onNextLevel;
+//         onNextLevel = 0;
+//     }
+
+//     for (int i = 0; i < k - 1; i++) {
+//         minHeap.pop();
+//     }
+
+//     return -minHeap.top();
+// }
+
+void inOrder(TreeNode* root, vector<int>& srd) {
+    if (!root) {
+        return;
     }
 
-    for (int i = 0; i < k - 1; i++) {
-        minHeap.pop();
-    }
+    inOrder(root->left, srd);
+    srd.push_back(root->val);
+    inOrder(root->right, srd);
+}
 
-    return -minHeap.top();
+int kthSmallest(TreeNode* root, int k) {
+    vector<int> srd;
+
+    inOrder(root, srd);
+    
+    sort(srd.begin(), srd.end());
+
+    return srd[k - 1];
 }
 
 int main() {
